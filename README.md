@@ -42,11 +42,10 @@ Currently, composite (PRIMARY|UNIQUE|FOREIGN) KEY constraints are not supported.
 
 # METHODS
 
-- **new**
+- **new** - Create a new instance.
 
         Data::Generator::FromDDL->new(%options);
 
-    Create a new instance.
     Possible options are:
 
     - ddl => $ddl
@@ -69,11 +68,43 @@ Currently, composite (PRIMARY|UNIQUE|FOREIGN) KEY constraints are not supported.
 
         Ignored tables.
 
-- **generate**
+- **generate** - Generate dummy records.
 
-        $generator->generate($num, $out_fh, $format, $pretty);
+        $generator->generate($num, $out_fh, $format, $pretty, $bytes_per_sql);
 
-    Generate dummy data.
+    Arguments are:
+
+    - $num
+
+        Number of records generated.
+
+    - $out\_fh (default: \*STDOUT)
+
+        File handle object to which records are dumped.
+
+    - $format (default: 'sql')
+
+        Output format. Choices are **'sql'**, **'json'**, **'yaml'**.
+
+    - $pretty (default: false)
+
+        Boolean value whether to print output prettily.
+
+    - $bytes\_per\_sql (default: 1048576(1MB))
+
+        The maximum bytes of bulk insert statement.
+
+        This argument is releated to the MySQL's **'max\_allowed\_packet'** variable which stands for the maximum size of string. It's recommended to suit this argument for your MySQL settings.
+
+        cf. https://dev.mysql.com/doc/refman/5.1/en/server-system-variables.html#sysvar\_max\_allowed\_packet
+
+# COMMAND LINE INTERFACE
+
+The `datagen_from_ddl(1)` command is provided as an interface to this module.
+
+    $ datagen_from_ddl --num=100 --parser=mysql --pretty your_ddl.sql
+
+For more details, please see [datagen\_from\_ddl](https://metacpan.org/pod/datagen_from_ddl)(1).
 
 # LICENSE
 

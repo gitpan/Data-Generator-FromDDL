@@ -16,5 +16,6 @@ t/00_compile.t
 t/01_api.t
 t/02_fk.t
 t/03_datatype.t
+t/04_bulk_insert.t
 META.yml
 MANIFEST

@@ -28,7 +28,7 @@ no_index:
 provides:
   Data::Generator::FromDDL:
     file: lib/Data/Generator/FromDDL.pm
-    version: 0.01
+    version: 0.02
   Data::Generator::FromDDL::Builder:
     file: lib/Data/Generator/FromDDL/Builder.pm
     version: 0
@@ -53,10 +53,11 @@ requires:
   List::MoreUtils: 0
   List::Util: 0
   SQL::Translator: 0
+  Term::ANSIColor: 0
   YAML::Tiny: 0
   perl: 5.008005
 resources:
   bugtracker: https://github.com/addsict/Data-Generator-FromDDL/issues
   homepage: https://github.com/addsict/Data-Generator-FromDDL
   repository: git://github.com/addsict/Data-Generator-FromDDL.git
-version: 0.01
+version: 0.02

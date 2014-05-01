@@ -10,12 +10,15 @@ use Class::Accessor::Lite (
 
 use Data::Generator::FromDDL::Director;
 
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 
 sub generate {
-    my ($self, $num, $out_fh, $format, $pretty) = @_;
+    my ($self, $num, $out_fh, $format, $pretty, $bytes_per_sql) = @_;
     my $builder_class = $self->builder_class
         || 'Data::Generator::FromDDL::Builder::SerialOrder';
+    $format ||= 'sql';
+    $bytes_per_sql ||= 1024 * 1024; # 1MB;
+
     my $director = Data::Generator::FromDDL::Director->new({
         builder_class => $builder_class,
         parser => $self->parser || 'mysql',
@@ -27,14 +30,16 @@ sub generate {
 
     my $output = do {
         my $formatter;
-        if (defined($format) && lc($format) eq 'json') {
+        if (lc($format) eq 'json') {
             $formatter = 'to_json';
-        } elsif (defined($format) && lc($format) eq 'yaml') {
+        } elsif (lc($format) eq 'yaml') {
             $formatter = 'to_yaml';
         } else {
             $formatter = 'to_sql';
         }
-        join "\n", map { $_->$formatter($pretty) } @recordsets;
+        join "\n", map {
+            $_->$formatter($pretty, $bytes_per_sql)
+        } @recordsets;
     };
 
     $out_fh ||= *STDOUT;
@@ -93,11 +98,10 @@ Currently, composite (PRIMARY|UNIQUE|FOREIGN) KEY constraints are not supported.
 
 =over 4
 
-=item B<new>
+=item B<new> - Create a new instance.
 
     Data::Generator::FromDDL->new(%options);
 
-Create a new instance.
 Possible options are:
 
 =over 4
@@ -124,13 +128,49 @@ Ignored tables.
 
 =back
 
-=item B<generate>
+=item B<generate> - Generate dummy records.
 
-    $generator->generate($num, $out_fh, $format, $pretty);
+    $generator->generate($num, $out_fh, $format, $pretty, $bytes_per_sql);
 
-Generate dummy data.
+Arguments are:
+
+=over 4
+
+=item $num
+
+Number of records generated.
+
+=item $out_fh (default: *STDOUT)
+
+File handle object to which records are dumped.
+
+=item $format (default: 'sql')
+
+Output format. Choices are B<'sql'>, B<'json'>, B<'yaml'>.
+
+=item $pretty (default: false)
+
+Boolean value whether to print output prettily.
+
+=item $bytes_per_sql (default: 1048576(1MB))
+
+The maximum bytes of bulk insert statement.
+
+This argument is releated to the MySQL's B<'max_allowed_packet'> variable which stands for the maximum size of string. It's recommended to suit this argument for your MySQL settings.
+
+cf. https://dev.mysql.com/doc/refman/5.1/en/server-system-variables.html#sysvar_max_allowed_packet
 
 =back
+
+=back
+
+=head1 COMMAND LINE INTERFACE
+
+The C<datagen_from_ddl(1)> command is provided as an interface to this module.
+
+    $ datagen_from_ddl --num=100 --parser=mysql --pretty your_ddl.sql
+
+For more details, please see L<datagen_from_ddl>(1).
 
 =head1 LICENSE
 
