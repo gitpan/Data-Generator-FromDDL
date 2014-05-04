@@ -8,6 +8,7 @@ lib/Data/Generator/FromDDL.pm
 lib/Data/Generator/FromDDL/Builder.pm
 lib/Data/Generator/FromDDL/Builder/SerialOrder.pm
 lib/Data/Generator/FromDDL/Director.pm
+lib/Data/Generator/FromDDL/Formatter.pm
 lib/Data/Generator/FromDDL/RecordSet.pm
 lib/Data/Generator/FromDDL/Util.pm
 minil.toml
@@ -17,5 +18,6 @@ t/01_api.t
 t/02_fk.t
 t/03_datatype.t
 t/04_bulk_insert.t
+t/05_recordset.t
 META.yml
 MANIFEST
