@@ -66,13 +66,16 @@
    "provides" : {
       "Data::Generator::FromDDL" : {
          "file" : "lib/Data/Generator/FromDDL.pm",
-         "version" : "0.03"
+         "version" : "0.04"
       },
       "Data::Generator::FromDDL::Builder" : {
          "file" : "lib/Data/Generator/FromDDL/Builder.pm"
       },
       "Data::Generator::FromDDL::Builder::SerialOrder" : {
          "file" : "lib/Data/Generator/FromDDL/Builder/SerialOrder.pm"
+      },
+      "Data::Generator::FromDDL::CLI" : {
+         "file" : "lib/Data/Generator/FromDDL/CLI.pm"
       },
       "Data::Generator::FromDDL::Director" : {
          "file" : "lib/Data/Generator/FromDDL/Director.pm"
@@ -98,5 +101,5 @@
          "web" : "https://github.com/addsict/Data-Generator-FromDDL"
       }
    },
-   "version" : "0.03"
+   "version" : "0.04"
 }
