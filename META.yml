@@ -28,7 +28,7 @@ no_index:
 provides:
   Data::Generator::FromDDL:
     file: lib/Data/Generator/FromDDL.pm
-    version: 0.04
+    version: 0.05
   Data::Generator::FromDDL::Builder:
     file: lib/Data/Generator/FromDDL/Builder.pm
     version: 0
@@ -66,4 +66,4 @@ resources:
   bugtracker: https://github.com/addsict/Data-Generator-FromDDL/issues
   homepage: https://github.com/addsict/Data-Generator-FromDDL
   repository: git://github.com/addsict/Data-Generator-FromDDL.git
-version: 0.04
+version: 0.05
