@@ -2,6 +2,7 @@ package Data::Generator::FromDDL;
 use 5.008005;
 use strict;
 use warnings;
+use Carp qw(croak);
 use SQL::Translator;
 use Class::Accessor::Lite (
     new => 1,
@@ -11,7 +12,7 @@ use Class::Accessor::Lite (
 use Data::Generator::FromDDL::Director;
 use Data::Generator::FromDDL::Util qw(normalize_parser_str);
 
-our $VERSION = "0.05";
+our $VERSION = "0.06";
 
 sub generate {
     my ($self, $num, $out_fh, $format, $pretty, $bytes_per_sql) = @_;
@@ -45,7 +46,7 @@ sub _parse_ddl {
     my ($parser, $ddl) = @_;
     my $tr = SQL::Translator->new;
     $tr->parser(normalize_parser_str($parser))->($tr, $ddl);
-    die "\nParsing DDL failed. Please check a DDL syntax.\n"
+    croak "Parsing DDL failed. Please check a DDL syntax.\n"
         unless $tr->schema->is_valid;
 
     return $tr->schema;
@@ -61,7 +62,7 @@ sub _load_builder_class {
         require "$builder_file.pm";
     };
     if ($@) {
-        croak("Can't require $builder_class");
+        croak("Can't require $builder_class \n");
     }
 
     return $builder_class;
@@ -158,9 +159,19 @@ Arguments are:
 
 =over 4
 
-=item $num
+=item $num or \%num
 
 Number of records generated.
+
+Or you can also give number of records for each table.
+
+    $num = {all => 20, # 20 records for all tables
+            tables => {
+                users => 10 # 10 records for 'users' table
+                }
+            };
+
+This is useful for table that has one-to-many relationship with other table.
 
 =item $out_fh (default: *STDOUT)
 
@@ -193,6 +204,14 @@ The C<datagen_from_ddl(1)> command is provided as an interface to this module.
     $ datagen_from_ddl --num=100 --parser=mysql --pretty your_ddl.sql
 
 For more details, please see L<datagen_from_ddl>(1).
+
+=head1 CONTRIBUTORS
+
+=over 4
+
+=item Kesin11 (Kenta Kase)
+
+=back
 
 =head1 LICENSE
 
